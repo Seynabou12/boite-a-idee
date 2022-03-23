@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -55,14 +55,27 @@ function Idea() {
                     <td>{item.titre}</td>
                     <td>{item.desc}</td>
                     <td>
-                        <Link to={`edit-idea/${item.id}`} className="btn btn-success btn-sm">Modifier</Link>
+                        <Link to={`edit-idea/${item.id}`} className="btn btn-success btn-sm">Approuver</Link>
+                    </td>
+
+                    <td>
+                        <Link to={`edit-idea/${item.id}`} className="btn btn-success btn-sm">Refuser</Link>
                     </td>
                     <td>
-                        <button type="button" onClick={(e) => deleteIdea(e, item.id)} className="btn btn-danger btn-sm">Supprimer</button>
+                        <button type="button" onClick={(e) => deleteIdea(e, item.id)} className="btn btn-danger btn-sm">Refuser</button>
                     </td>
                 </tr>
             );
         });
+    }
+
+    const [statut, setStatut] = useState(ideas.statut);
+    const handleValidClick = () => {
+        axios.patch(
+            `http://127.0.0.1:8000/api/ideas/${ideas.id}`,
+            {statut: true}
+        )
+        .then( () => setStatut(true))
     }
 
     return (
@@ -84,15 +97,14 @@ function Idea() {
                                             <th>ID</th>
                                             <th>Titre</th>
                                             <th>Description</th>
-                                            <th>Modifier</th>
-                                            <th>Supprimer</th>
+                                            <th>Approuver</th>
+                                            <th>Refuser</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {idea_HTMLTABLE}
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
